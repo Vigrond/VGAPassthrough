@@ -21,20 +21,36 @@ http://archive.ubuntu.com/ubuntu/ubuntu/pool/universe/e/edk2/
 "ovmf_0~20180205.c0d9813c-2_all.deb"
 
 ### QEMU
-Build latest QEMU using docker
+Build latest QEMU
 
-https://wiki.qemu.org/Testing/DockerBuild
 
 ```
-curl -fsSL get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-# Might need to restart Ubuntu here
+# install packages for QEMU features
+sudo apt-get install libusb-1.0-0-dev libiscsi-dev librados-dev libncurses5-dev libncursesw5-dev \
+    libseccomp-dev libgnutls-dev libssh2-1-dev  libspice-server-dev \
+    libspice-protocol-dev libnss3-dev libfdt-dev \
+    libgtk-3-dev libvte-2.91-dev libsdl1.2-dev libpng12-dev libpixman-1-dev \
+    libvdeplug-dev liblzo2-dev libsnappy-dev libbz2-dev libxen-dev librdmacm-dev libibverbs-dev \
+    libsasl2-dev libjpeg-turbo8-dev xfslibs-dev libcap-ng-dev libbrlapi-dev libcurl4-gnutls-dev \
+    libbluetooth-dev librbd-dev libaio-dev glusterfs-common libnuma-dev libepoxy-dev libdrm-dev libgbm-dev \
+    libjemalloc-dev libcacard-dev libusbredirhost-dev libnfs-dev libcap-dev libattr1-dev \
+    texinfo \
+    gettext git make ccache python-yaml gcc clang sparse \
+    samba
 
 git clone git://git.qemu-project.org/qemu.git
 cd qemu
-make docker-test-quick@ubuntu
-...this might take a while..like...do it overnight or go get lunch
+mkdir -p bin/x86
+cd bin/x86
+../../configure --target-list=x86_64-softmmu
+
+# this assumes you have at least 4 cores
+make -j4
+
+# lets copy this to our home folder for now
+cp x86_64-softmmu/qemu-system-x86_64 ~
 ```
+
 ### Enable IOMMU
 Ensure `GRUB_CMDLINE_LINUX_DEFAULT` contains `intel_iommu=on`
 ```
