@@ -32,7 +32,7 @@ sudo sh get-docker.sh
 
 git clone git://git.qemu-project.org/qemu.git
 cd qemu
-make docker-test-full@ubuntu
+make docker-test-quick@ubuntu
 ...this might take a while..like...do it overnight or go get lunch
 ```
 ### Enable IOMMU
